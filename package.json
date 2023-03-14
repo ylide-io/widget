@@ -1,0 +1,44 @@
+{
+	"name": "@ylide/widget",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"build": "tsc"
+	},
+	"eslintConfig": {
+		"root": true,
+		"extends": [
+			"eslint:recommended",
+			"plugin:@typescript-eslint/recommended"
+		],
+		"parser": "@typescript-eslint/parser",
+		"plugins": [
+			"@typescript-eslint",
+			"simple-import-sort"
+		],
+		"rules": {
+			"simple-import-sort/imports": "warn",
+			"simple-import-sort/exports": "warn"
+		}
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.55.0",
+		"@typescript-eslint/parser": "^5.55.0",
+		"eslint": "8.22.0",
+		"eslint-plugin-simple-import-sort": "^8.0.0",
+		"prettier": "^2.8.1",
+		"typescript": "^4.9.5"
+	}
+}
