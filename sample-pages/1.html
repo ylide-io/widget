@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Page 1</title>
+	</head>
+	<body>
+		<b id="address">0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329</b>
+		<button id="send-message-button">Send Message</button>
+
+		<hr />
+
+		<div
+			class="ylide-send-message"
+			data-to="0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329"
+			data-subject="Hello World"
+		></div>
+
+		<script src="../build/index.js"></script>
+		<script type="text/javascript">
+			document.getElementById('send-message-button').onclick = function () {
+				Ylide.openSendMessagePopup({ address: '0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329' })
+			}
+		</script>
+	</body>
+</html>

@@ -13,7 +13,8 @@
 		"module": "esnext",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
-		"noUncheckedIndexedAccess": true
+		"noUncheckedIndexedAccess": true,
+		"downlevelIteration": true
 	},
 	"include": ["src"]
 }
