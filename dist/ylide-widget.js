@@ -54,6 +54,9 @@ if (!window.Ylide) {
             init: function () {
                 var buttons = toArray(document.getElementsByClassName('ylide-send-message'));
                 buttons.forEach(function (button) {
+                    if (button.dataset.initialised)
+                        return;
+                    button.dataset.initialised = '1';
                     Object.assign(button.style, {
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -143,4 +146,13 @@ if (!window.Ylide) {
         };
     })());
     Ylide_1.init();
+    // @ts-ignore
+    var MutationObserver_1 = window.MutationObserver || window.WebKitMutationObserver;
+    if (MutationObserver_1) {
+        var mutationObserver = new MutationObserver_1(function () { return Ylide_1.init(); });
+        mutationObserver.observe(document.body, { childList: true, subtree: true });
+    }
+    else {
+        document.body.addEventListener('DOMNodeInsertedIntoDocument', function () { return Ylide_1.init(); }, false);
+    }
 }

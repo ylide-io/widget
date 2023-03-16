@@ -83,6 +83,9 @@ if (!window.Ylide) {
 				const buttons = toArray(document.getElementsByClassName('ylide-send-message')) as HTMLElement[]
 
 				buttons.forEach(button => {
+					if (button.dataset.initialised) return
+					button.dataset.initialised = '1'
+
 					Object.assign(button.style, {
 						display: 'inline-flex',
 						alignItems: 'center',
@@ -187,4 +190,14 @@ if (!window.Ylide) {
 	})())
 
 	Ylide.init()
+
+	// @ts-ignore
+	const MutationObserver = window.MutationObserver || window.WebKitMutationObserver
+
+	if (MutationObserver) {
+		const mutationObserver = new MutationObserver(() => Ylide.init())
+		mutationObserver.observe(document.body, { childList: true, subtree: true })
+	} else {
+		document.body.addEventListener('DOMNodeInsertedIntoDocument', () => Ylide.init(), false)
+	}
 }

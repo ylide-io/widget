@@ -9,22 +9,36 @@
 
 		<hr />
 
-		Custom Button <button id="send-message-button">Send Message</button>
+		Custom button <button id="send-message-button">Send Message</button>
 
 		<hr />
 
-		Pre-defined Button
+		Pre-defined button
 		<div
 			class="ylide-send-message"
 			data-to="0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329"
 			data-subject="Hello World"
 		></div>
 
+		<hr />
+
+		Realtime-added button (after 2 seconds)
+		<span id="realtime-added-button-wrapper"></span>
+
 		<script src="../dist/ylide-widget.js"></script>
 		<script type="text/javascript">
 			document.getElementById('send-message-button').onclick = function () {
 				Ylide.openSendMessagePopup({ address: '0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329' })
 			}
+
+			setTimeout(() => {
+				const wrapper = document.getElementById('realtime-added-button-wrapper')
+
+				const div = document.createElement('div')
+				div.className = 'ylide-send-message'
+				div.dataset.to = '0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329'
+				wrapper.appendChild(div)
+			}, 2000)
 		</script>
 	</body>
 </html>
