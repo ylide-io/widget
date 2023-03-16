@@ -86,6 +86,7 @@ if (!window.Ylide) {
 					Object.assign(button.style, {
 						display: 'inline-flex',
 						alignItems: 'center',
+						verticalAlign: 'middle',
 						padding: '4px 12px',
 						font: '13px/1 sans-serif',
 						color: '#222',
