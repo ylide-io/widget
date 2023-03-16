@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outDir": "build",
+		"outFile": "./dist/ylide-widget.js",
 		"target": "ES5",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"strict": true,
