@@ -2,6 +2,12 @@
 if (!window.Ylide) {
 	// @ts-ignore
 	const Ylide = (window.Ylide = (() => {
+		function toArray<T>(iterable: ArrayLike<T>) {
+			return Array.prototype.slice.call(iterable)
+		}
+
+		//
+
 		function createElement<T extends keyof HTMLElementTagNameMap>(
 			tagName: T,
 			params?: {
@@ -74,7 +80,7 @@ if (!window.Ylide) {
 
 		return {
 			init: () => {
-				const buttons = [...document.getElementsByClassName('ylide-send-message')] as HTMLElement[]
+				const buttons = toArray(document.getElementsByClassName('ylide-send-message')) as HTMLElement[]
 
 				buttons.forEach(button => {
 					Object.assign(button.style, {
