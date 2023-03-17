@@ -25,10 +25,15 @@
 		Realtime-added button (after 2 seconds)
 		<span id="realtime-added-button-wrapper"></span>
 
+		<hr />
+
+		No-public-keys button (shouldn't appear)
+		<div class="ylide-send-message" data-to="0x123123123123123123123123" data-subject="Hello World"></div>
+
 		<script src="../dist/ylide-widget.js"></script>
 		<script type="text/javascript">
 			document.getElementById('send-message-button').onclick = function () {
-				Ylide.openSendMessagePopup({ address: '0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329' })
+				Ylide.hasPublicKeys('0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329').then(res => console.log(res))
 			}
 
 			setTimeout(() => {
