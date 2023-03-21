@@ -2,6 +2,48 @@
 if (!window.Ylide) {
 	// @ts-ignore
 	const Ylide = (window.Ylide = (() => {
+		enum WidgetId {
+			SEND_MESSAGE = 'SEND_MESSAGE',
+		}
+
+		enum WidgetEvent {
+			CLOSE = 'CLOSE',
+		}
+
+		interface WidgetMessage<Payload> {
+			ylide: true
+			widget: WidgetId
+			event: WidgetEvent
+			payload?: Payload
+		}
+
+		function decodeWidgetMessage<Payload = undefined>(e: MessageEvent) {
+			try {
+				const json = JSON.parse(e.data) as WidgetMessage<Payload>
+				invariant(json.ylide)
+				invariant(Object.values(WidgetId).includes(json.widget))
+				invariant(Object.values(WidgetEvent).includes(json.event))
+				return json
+			} catch (e) {
+				return
+			}
+		}
+
+		//
+
+		function invariant(condition: unknown, info?: string | Error | (() => string | Error)): asserts condition {
+			if (condition) return
+
+			const message =
+				(info instanceof Error ? info : typeof info === 'function' ? info() : info) || 'Invariant failed'
+
+			if (message instanceof Error) {
+				throw message
+			} else {
+				throw new Error(message)
+			}
+		}
+
 		function toArray<T>(iterable: ArrayLike<T>) {
 			return Array.prototype.slice.call(iterable)
 		}
@@ -181,14 +223,32 @@ if (!window.Ylide) {
 			openSendMessagePopup: (() => {
 				const SEND_MESSAGE_POPUP_URL = 'http://localhost:3000/widget/send-message'
 
-				let sendMessageContainer: HTMLDivElement | undefined
-				let sendMessageIFrame: HTMLIFrameElement | undefined
-
-				return (options: { address: string; subject?: string }) => {
+				function close() {
 					if (sendMessageContainer) {
 						root.removeChild(sendMessageContainer)
 					}
 
+					sendMessageContainer = sendMessageIFrame = undefined
+
+					window.removeEventListener('message', messageListener)
+				}
+
+				function messageListener(e: MessageEvent) {
+					const message = decodeWidgetMessage(e)
+					if (message?.widget !== WidgetId.SEND_MESSAGE) return
+
+					if (message.event === WidgetEvent.CLOSE) {
+						close()
+					}
+				}
+
+				let sendMessageContainer: HTMLDivElement | undefined
+				let sendMessageIFrame: HTMLIFrameElement | undefined
+
+				return (options: { address: string; subject?: string }) => {
+					close()
+
+					// TODO: Responsiveness
 					sendMessageContainer = createElement('div', {
 						style: {
 							position: 'fixed',
@@ -218,6 +278,8 @@ if (!window.Ylide) {
 						to: options.address,
 						subject: options.subject,
 					}).toString()}`
+
+					window.addEventListener('message', messageListener)
 				}
 			})(),
 		}

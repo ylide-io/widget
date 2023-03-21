@@ -33,7 +33,7 @@
 		<script src="../dist/ylide-widget.js"></script>
 		<script type="text/javascript">
 			document.getElementById('send-message-button').onclick = function () {
-				Ylide.hasPublicKeys('0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329').then(res => console.log(res))
+				Ylide.openSendMessagePopup({ address: '0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329' })
 			}
 
 			setTimeout(() => {

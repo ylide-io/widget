@@ -39,6 +39,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 if (!window.Ylide) {
     // @ts-ignore
     var Ylide_1 = (window.Ylide = (function () {
+        var WidgetId;
+        (function (WidgetId) {
+            WidgetId["SEND_MESSAGE"] = "SEND_MESSAGE";
+        })(WidgetId || (WidgetId = {}));
+        var WidgetEvent;
+        (function (WidgetEvent) {
+            WidgetEvent["CLOSE"] = "CLOSE";
+        })(WidgetEvent || (WidgetEvent = {}));
+        function decodeWidgetMessage(e) {
+            try {
+                var json = JSON.parse(e.data);
+                invariant(json.ylide);
+                invariant(Object.values(WidgetId).includes(json.widget));
+                invariant(Object.values(WidgetEvent).includes(json.event));
+                return json;
+            }
+            catch (e) {
+                return;
+            }
+        }
+        //
+        function invariant(condition, info) {
+            if (condition)
+                return;
+            var message = (info instanceof Error ? info : typeof info === 'function' ? info() : info) || 'Invariant failed';
+            if (message instanceof Error) {
+                throw message;
+            }
+            else {
+                throw new Error(message);
+            }
+        }
         function toArray(iterable) {
             return Array.prototype.slice.call(iterable);
         }
@@ -194,12 +226,26 @@ if (!window.Ylide) {
             }); },
             openSendMessagePopup: (function () {
                 var SEND_MESSAGE_POPUP_URL = 'http://localhost:3000/widget/send-message';
-                var sendMessageContainer;
-                var sendMessageIFrame;
-                return function (options) {
+                function close() {
                     if (sendMessageContainer) {
                         root.removeChild(sendMessageContainer);
                     }
+                    sendMessageContainer = sendMessageIFrame = undefined;
+                    window.removeEventListener('message', messageListener);
+                }
+                function messageListener(e) {
+                    var message = decodeWidgetMessage(e);
+                    if ((message === null || message === void 0 ? void 0 : message.widget) !== WidgetId.SEND_MESSAGE)
+                        return;
+                    if (message.event === WidgetEvent.CLOSE) {
+                        close();
+                    }
+                }
+                var sendMessageContainer;
+                var sendMessageIFrame;
+                return function (options) {
+                    close();
+                    // TODO: Responsiveness
                     sendMessageContainer = createElement('div', {
                         style: {
                             position: 'fixed',
@@ -227,6 +273,7 @@ if (!window.Ylide) {
                         to: options.address,
                         subject: options.subject,
                     }).toString());
+                    window.addEventListener('message', messageListener);
                 };
             })(),
         };
