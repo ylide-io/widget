@@ -10,7 +10,7 @@ iframe.ylide-iframe {
 .ylide-send-message-popup {
 	position: fixed;
     right: 36px;
-    bottom: 0px;
+    bottom: 0;
     width: 500px;
     height: 520px;
     max-width: 100%;
@@ -19,6 +19,7 @@ iframe.ylide-iframe {
     background: #f7f7ee;
     border-radius: 8px 8px 0 0;
     box-shadow: rgba(26, 179, 148, 0.4) 4px 4px 24px, rgba(151, 71, 255, 0.25) -16px -8px 64px;
+    transition: all 200ms;
 }
 
 .ylide-floating-button {
@@ -57,6 +58,24 @@ iframe.ylide-iframe {
     background: #f7f7ee;
     border-radius: 8px;
     box-shadow: rgba(26, 179, 148, 0.4) 4px 4px 24px, rgba(151, 71, 255, 0.25) -16px -8px 64px;
+    transition: all 200ms;
+}
+
+@media (max-width: 640px), (max-height: 640px) {
+	.ylide-send-message-popup {
+		right: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 0;
+	}
+  
+  	.ylide-mailbox-popup {
+		top: 0;
+		right: 0;
+		width: 100%;
+    	height: auto;
+		border-radius: 0;
+  	}
 }
 	`
 
