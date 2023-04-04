@@ -5,7 +5,8 @@
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUncheckedIndexedAccess": true
+		"noUncheckedIndexedAccess": true,
+		"newLine": "lf"
 	},
 	"include": ["src"]
 }
