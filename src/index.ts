@@ -1,3 +1,5 @@
+declare let YLIDE_URL: string | undefined
+
 // @ts-ignore
 if (!window.Ylide) {
 	const STYLES = `
@@ -326,7 +328,7 @@ iframe.ylide-iframe {
 		})()
 
 		const SendMessagePopup = (() => {
-			const SEND_MESSAGE_POPUP_URL = 'http://localhost:3000/widget/send-message'
+			const SEND_MESSAGE_POPUP_URL = `${YLIDE_URL}/widget/send-message`
 
 			let container: HTMLDivElement | undefined
 			let iframe: HTMLIFrameElement | undefined
@@ -379,7 +381,7 @@ iframe.ylide-iframe {
 		})()
 
 		const MailboxPopup = (() => {
-			const MAILBOX_POPUP_URL = 'http://localhost:3000/widget/mailbox'
+			const MAILBOX_POPUP_URL = `${YLIDE_URL}/widget/mailbox`
 			const CLASS_NAME = 'ylide-mailbox-popup'
 
 			let container: HTMLDivElement | undefined

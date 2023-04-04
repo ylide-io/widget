@@ -1,7 +1,8 @@
+const webpack = require('webpack')
 const path = require('path')
 
 const output = isMinimized => {
-	return {
+	return env => ({
 		mode: 'production',
 		optimization: {
 			minimize: !!isMinimized,
@@ -23,7 +24,12 @@ const output = isMinimized => {
 			filename: `ylide-widget${isMinimized ? '.min' : ''}.js`,
 			path: path.resolve(__dirname, 'dist'),
 		},
-	}
+		plugins: [
+			new webpack.DefinePlugin({
+				YLIDE_URL: JSON.stringify(env.YLIDE_URL || 'https://hub.ylide.io'),
+			}),
+		],
+	})
 }
 
 module.exports = [output(), output(true)]

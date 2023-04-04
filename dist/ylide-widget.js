@@ -205,7 +205,7 @@ if (!window.Ylide) {
             };
         })();
         var SendMessagePopup = (function () {
-            var SEND_MESSAGE_POPUP_URL = 'http://localhost:3000/widget/send-message';
+            var SEND_MESSAGE_POPUP_URL = "".concat("https://hub.ylide.io", "/widget/send-message");
             var container;
             var iframe;
             function messageListener(e) {
@@ -246,7 +246,7 @@ if (!window.Ylide) {
             };
         })();
         var MailboxPopup = (function () {
-            var MAILBOX_POPUP_URL = 'http://localhost:3000/widget/mailbox';
+            var MAILBOX_POPUP_URL = "".concat("https://hub.ylide.io", "/widget/mailbox");
             var CLASS_NAME = 'ylide-mailbox-popup';
             var container;
             var iframe;
