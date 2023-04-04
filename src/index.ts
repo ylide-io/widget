@@ -63,22 +63,6 @@ iframe.ylide-iframe {
     transition: all 200ms;
 }
 
-.ylide-mailbox-popup-close {
-	display: flex;
-	align-items: center;
-    justify-content: center;
-    position: fixed;
-    right: 24px;
-    bottom: 504px;
-    width: 32px;
-    height: 32px;
-    color: #fff;
-    background: #9747ff;
-    border-radius: 100%;
-    box-shadow: rgba(151, 71, 255, 0.5) 2px 2px 16px;
-    cursor: pointer;
-}
-
 @media (max-width: 640px), (max-height: 640px) {
 	.ylide-send-message-popup {
 		right: 0;
@@ -94,13 +78,6 @@ iframe.ylide-iframe {
     	height: auto;
 		border-radius: 0;
   	}
-  	
-  	.ylide-mailbox-popup-close {
-		right: 36px;
-		bottom: 36px;
-		width: 48px;
-		height: 48px;
-	}
 }
 	`
 
@@ -384,7 +361,6 @@ iframe.ylide-iframe {
 
 			let container: HTMLDivElement | undefined
 			let iframe: HTMLIFrameElement | undefined
-			let closeButton: HTMLDivElement | undefined
 
 			function messageListener(e: MessageEvent) {
 				const message = decodeWidgetMessage(e)
@@ -412,15 +388,6 @@ iframe.ylide-iframe {
 
 					iframe.src = MAILBOX_POPUP_URL
 
-					closeButton = createElement('div', {
-						appendTo: root,
-						className: `${CLASS_NAME}-close`,
-					})
-
-					createSvg(CLOSE_ICON_SVG, { appendTo: closeButton })
-
-					closeButton.onclick = () => MailboxPopup.close()
-
 					window.addEventListener('message', messageListener)
 				},
 
@@ -429,11 +396,7 @@ iframe.ylide-iframe {
 						root.removeChild(container)
 					}
 
-					if (closeButton) {
-						root.removeChild(closeButton)
-					}
-
-					container = iframe = closeButton = undefined
+					container = iframe = undefined
 
 					window.removeEventListener('message', messageListener)
 				},
