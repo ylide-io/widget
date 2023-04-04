@@ -217,7 +217,6 @@ if (!window.Ylide) {
                 }
             }
             return {
-                isOpen: function () { return !!container; },
                 open: function (options) {
                     SendMessagePopup.close();
                     MailboxPopup.close();
@@ -260,7 +259,6 @@ if (!window.Ylide) {
                 }
             }
             return {
-                isOpen: function () { return !!container; },
                 open: function () {
                     MailboxPopup.close();
                     SendMessagePopup.close();
@@ -374,16 +372,7 @@ if (!window.Ylide) {
             openSendMessagePopup: SendMessagePopup.open,
             openMailboxPopup: MailboxPopup.open,
             showFloatingMailboxButton: function () {
-                FloatingButton.show(function () {
-                    if (MailboxPopup.isOpen()) {
-                        MailboxPopup.close();
-                        FloatingButton.setIsActive(false);
-                    }
-                    else {
-                        MailboxPopup.open();
-                        FloatingButton.setIsActive(true);
-                    }
-                });
+                FloatingButton.show(function () { return MailboxPopup.open(); });
             },
         };
     })());

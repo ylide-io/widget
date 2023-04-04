@@ -343,8 +343,6 @@ iframe.ylide-iframe {
 			}
 
 			return {
-				isOpen: () => !!container,
-
 				open: (options: { address: string; subject?: string }) => {
 					SendMessagePopup.close()
 					MailboxPopup.close()
@@ -398,8 +396,6 @@ iframe.ylide-iframe {
 			}
 
 			return {
-				isOpen: () => !!container,
-
 				open: () => {
 					MailboxPopup.close()
 					SendMessagePopup.close()
@@ -534,15 +530,7 @@ iframe.ylide-iframe {
 			openMailboxPopup: MailboxPopup.open,
 
 			showFloatingMailboxButton: () => {
-				FloatingButton.show(() => {
-					if (MailboxPopup.isOpen()) {
-						MailboxPopup.close()
-						FloatingButton.setIsActive(false)
-					} else {
-						MailboxPopup.open()
-						FloatingButton.setIsActive(true)
-					}
-				})
+				FloatingButton.show(() => MailboxPopup.open())
 			},
 		}
 	})())
