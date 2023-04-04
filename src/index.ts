@@ -234,86 +234,37 @@ iframe.ylide-iframe {
 			},
 		})
 
-		const SendMessageWidget = (() => {
-			const SEND_MESSAGE_POPUP_URL = 'http://localhost:3000/widget/send-message'
-
-			let container: HTMLDivElement | undefined
-			let iframe: HTMLIFrameElement | undefined
-
-			function messageListener(e: MessageEvent) {
-				const message = decodeWidgetMessage(e)
-				if (message?.widget !== WidgetId.SEND_MESSAGE) return
-
-				if (message.event === WidgetEvent.CLOSE) {
-					SendMessageWidget.closePopup()
-				}
-			}
-
-			return {
-				openPopup: (options: { address: string; subject?: string }) => {
-					SendMessageWidget.closePopup()
-					MailboxWidget.closePopup()
-
-					// TODO: Responsiveness
-					container = createElement('div', {
-						appendTo: root,
-						className: 'ylide-send-message-popup',
-					})
-
-					iframe = createElement('iframe', {
-						appendTo: container,
-						className: 'ylide-iframe',
-					})
-
-					iframe.src = `${SEND_MESSAGE_POPUP_URL}?${createURLSearchParams({
-						to: options.address,
-						subject: options.subject,
-					}).toString()}`
-
-					window.addEventListener('message', messageListener)
-				},
-
-				closePopup: () => {
-					if (container) {
-						root.removeChild(container)
-					}
-
-					container = iframe = undefined
-
-					window.removeEventListener('message', messageListener)
-				},
-			}
-		})()
-
-		const MailboxWidget = (() => {
-			const MAILBOX_POPUP_URL = 'http://localhost:3000/widget/mailbox'
+		const FloatingButton = (() => {
+			const CLASS_NAME = 'ylide-floating-button'
 
 			let button: HTMLDivElement | undefined
 
-			let container: HTMLDivElement | undefined
-			let iframe: HTMLIFrameElement | undefined
-
-			function messageListener(e: MessageEvent) {
-				const message = decodeWidgetMessage(e)
-				if (message?.widget !== WidgetId.MAILBOX) return
-
-				if (message.event === WidgetEvent.CLOSE) {
-					MailboxWidget.closePopup()
-				}
-			}
-
 			return {
-				updateButton: () => {
-					if (button) {
-						root.removeChild(button)
-					}
+				show: (onClick?: () => void) => {
+					FloatingButton.hide()
 
 					button = createElement('div', {
 						appendTo: root,
-						className: `ylide-floating-button ${container ? 'ylide-floating-button_active' : ''}`,
+						className: CLASS_NAME,
 					})
 
-					const svgContent = container
+					FloatingButton.setIsActive(false)
+					FloatingButton.setOnClick(onClick)
+				},
+
+				hide: () => {
+					if (button) {
+						root.removeChild(button)
+					}
+				},
+
+				setIsActive: (isActive: boolean) => {
+					if (!button) return
+
+					button.className = `${CLASS_NAME} ${isActive ? `${CLASS_NAME}_active` : ''}`
+					button.innerHTML = ''
+
+					const svgContent = isActive
 						? `
 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 	<path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683417 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683417 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z" fill="white"/>
@@ -341,19 +292,90 @@ iframe.ylide-iframe {
 					createSvg(svgContent, {
 						appendTo: button,
 					})
-
-					button.onclick = () => {
-						if (container) {
-							MailboxWidget.closePopup()
-						} else {
-							MailboxWidget.openPopup()
-						}
-					}
 				},
 
-				openPopup: () => {
-					MailboxWidget.closePopup()
-					SendMessageWidget.closePopup()
+				setOnClick: (onClick?: () => void) => {
+					if (!button) return
+
+					button.onclick = onClick || null
+				},
+			}
+		})()
+
+		const SendMessagePopup = (() => {
+			const SEND_MESSAGE_POPUP_URL = 'http://localhost:3000/widget/send-message'
+
+			let container: HTMLDivElement | undefined
+			let iframe: HTMLIFrameElement | undefined
+
+			function messageListener(e: MessageEvent) {
+				const message = decodeWidgetMessage(e)
+				if (message?.widget !== WidgetId.SEND_MESSAGE) return
+
+				if (message.event === WidgetEvent.CLOSE) {
+					SendMessagePopup.close()
+				}
+			}
+
+			return {
+				isOpen: () => !!container,
+
+				open: (options: { address: string; subject?: string }) => {
+					SendMessagePopup.close()
+					MailboxPopup.close()
+
+					// TODO: Responsiveness
+					container = createElement('div', {
+						appendTo: root,
+						className: 'ylide-send-message-popup',
+					})
+
+					iframe = createElement('iframe', {
+						appendTo: container,
+						className: 'ylide-iframe',
+					})
+
+					iframe.src = `${SEND_MESSAGE_POPUP_URL}?${createURLSearchParams({
+						to: options.address,
+						subject: options.subject,
+					}).toString()}`
+
+					window.addEventListener('message', messageListener)
+				},
+
+				close: () => {
+					if (container) {
+						root.removeChild(container)
+					}
+
+					container = iframe = undefined
+
+					window.removeEventListener('message', messageListener)
+				},
+			}
+		})()
+
+		const MailboxPopup = (() => {
+			const MAILBOX_POPUP_URL = 'http://localhost:3000/widget/mailbox'
+
+			let container: HTMLDivElement | undefined
+			let iframe: HTMLIFrameElement | undefined
+
+			function messageListener(e: MessageEvent) {
+				const message = decodeWidgetMessage(e)
+				if (message?.widget !== WidgetId.MAILBOX) return
+
+				if (message.event === WidgetEvent.CLOSE) {
+					MailboxPopup.close()
+				}
+			}
+
+			return {
+				isOpen: () => !!container,
+
+				open: () => {
+					MailboxPopup.close()
+					SendMessagePopup.close()
 
 					container = createElement('div', {
 						appendTo: root,
@@ -368,11 +390,9 @@ iframe.ylide-iframe {
 					iframe.src = MAILBOX_POPUP_URL
 
 					window.addEventListener('message', messageListener)
-
-					MailboxWidget.updateButton()
 				},
 
-				closePopup: () => {
+				close: () => {
 					if (container) {
 						root.removeChild(container)
 					}
@@ -380,8 +400,6 @@ iframe.ylide-iframe {
 					container = iframe = undefined
 
 					window.removeEventListener('message', messageListener)
-
-					MailboxWidget.updateButton()
 				},
 			}
 		})()
@@ -471,9 +489,19 @@ iframe.ylide-iframe {
 				return Object.keys(data).some(key => data[key] != null)
 			},
 
-			openSendMessagePopup: SendMessageWidget.openPopup,
+			openSendMessagePopup: SendMessagePopup.open,
 
-			showFloatingMailboxButton: MailboxWidget.updateButton,
+			showFloatingMailboxButton: () => {
+				FloatingButton.show(() => {
+					if (MailboxPopup.isOpen()) {
+						MailboxPopup.close()
+						FloatingButton.setIsActive(false)
+					} else {
+						MailboxPopup.open()
+						FloatingButton.setIsActive(true)
+					}
+				})
+			},
 		}
 	})())
 
