@@ -36,6 +36,9 @@
 
 		<script src="../dist/ylide-widget.js"></script>
 		<script type="text/javascript">
+			// Optional init call (if some conficuration needed)
+			Ylide.init({ ylideHubUrl: 'https://staging.ylide.io/' })
+
 			document.getElementById('send-message-button').onclick = function () {
 				Ylide.openSendMessagePopup({ address: '0xd3c2b7b1ebcd6949abcf1041cc629b2648ad2329' })
 			}

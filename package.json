@@ -3,8 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"build": "webpack",
-		"build:dev": "webpack --env YLIDE_URL=http://localhost:3000"
+		"build": "webpack"
 	},
 	"eslintConfig": {
 		"root": true,

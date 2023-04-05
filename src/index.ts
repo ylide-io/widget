@@ -1,5 +1,3 @@
-declare let YLIDE_URL: string | undefined
-
 // @ts-ignore
 if (!window.Ylide) {
 	const STYLES = `
@@ -108,36 +106,6 @@ iframe.ylide-iframe {
 
 	// @ts-ignore
 	const Ylide = (window.Ylide = (() => {
-		enum WidgetId {
-			SEND_MESSAGE = 'SEND_MESSAGE',
-			MAILBOX = 'MAILBOX',
-		}
-
-		enum WidgetEvent {
-			CLOSE = 'CLOSE',
-		}
-
-		interface WidgetMessage<Payload> {
-			ylide: true
-			widget: WidgetId
-			event: WidgetEvent
-			payload?: Payload
-		}
-
-		function decodeWidgetMessage<Payload = undefined>(e: MessageEvent) {
-			try {
-				const json = JSON.parse(e.data) as WidgetMessage<Payload>
-				invariant(json.ylide)
-				invariant(Object.values(WidgetId).includes(json.widget))
-				invariant(Object.values(WidgetEvent).includes(json.event))
-				return json
-			} catch (e) {
-				return
-			}
-		}
-
-		//
-
 		function invariant(condition: unknown, info?: string | Error | (() => string | Error)): asserts condition {
 			if (condition) return
 
@@ -224,6 +192,38 @@ iframe.ylide-iframe {
 
 		//
 
+		enum WidgetId {
+			SEND_MESSAGE = 'SEND_MESSAGE',
+			MAILBOX = 'MAILBOX',
+		}
+
+		enum WidgetEvent {
+			CLOSE = 'CLOSE',
+		}
+
+		interface WidgetMessage<Payload> {
+			ylide: true
+			widget: WidgetId
+			event: WidgetEvent
+			payload?: Payload
+		}
+
+		function decodeWidgetMessage<Payload = undefined>(e: MessageEvent) {
+			try {
+				const json = JSON.parse(e.data) as WidgetMessage<Payload>
+				invariant(json.ylide)
+				invariant(Object.values(WidgetId).includes(json.widget))
+				invariant(Object.values(WidgetEvent).includes(json.event))
+				return json
+			} catch (e) {
+				return
+			}
+		}
+
+		//
+
+		let ylideHubUrl = 'https://hub.ylide.io'
+
 		async function requestToIndexerHub(url: string, body: any) {
 			const endpoints = [
 				'https://idx1.ylide.io',
@@ -305,8 +305,6 @@ iframe.ylide-iframe {
 		})()
 
 		const SendMessagePopup = (() => {
-			const SEND_MESSAGE_POPUP_URL = `${YLIDE_URL}/widget/send-message`
-
 			let container: HTMLDivElement | undefined
 			let iframe: HTMLIFrameElement | undefined
 
@@ -335,7 +333,7 @@ iframe.ylide-iframe {
 						className: 'ylide-iframe',
 					})
 
-					iframe.src = `${SEND_MESSAGE_POPUP_URL}?${createURLSearchParams({
+					iframe.src = `${ylideHubUrl}/widget/send-message?${createURLSearchParams({
 						to: options.address,
 						subject: options.subject,
 					}).toString()}`
@@ -356,7 +354,6 @@ iframe.ylide-iframe {
 		})()
 
 		const MailboxPopup = (() => {
-			const MAILBOX_POPUP_URL = `${YLIDE_URL}/widget/mailbox`
 			const CLASS_NAME = 'ylide-mailbox-popup'
 
 			let container: HTMLDivElement | undefined
@@ -386,7 +383,7 @@ iframe.ylide-iframe {
 						className: 'ylide-iframe',
 					})
 
-					iframe.src = MAILBOX_POPUP_URL
+					iframe.src = `${ylideHubUrl}/widget/mailbox`
 
 					window.addEventListener('message', messageListener)
 				},
@@ -409,7 +406,11 @@ iframe.ylide-iframe {
 			init: (() => {
 				let isInitialized = false
 
-				return () => {
+				return (options?: { ylideHubUrl?: string }) => {
+					if (options?.ylideHubUrl) {
+						ylideHubUrl = options.ylideHubUrl.replace(/\/+$/, '')
+					}
+
 					if (!isInitialized) {
 						const styleSheet = document.createElement('style')
 						styleSheet.innerHTML = STYLES

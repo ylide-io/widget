@@ -49,28 +49,6 @@ if (!window.Ylide) {
     var CLOSE_ICON_SVG_1 = "\n<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683417 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683417 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z\" fill=\"white\"/>\n</svg>";
     // @ts-ignore
     var Ylide_1 = (window.Ylide = (function () {
-        var WidgetId;
-        (function (WidgetId) {
-            WidgetId["SEND_MESSAGE"] = "SEND_MESSAGE";
-            WidgetId["MAILBOX"] = "MAILBOX";
-        })(WidgetId || (WidgetId = {}));
-        var WidgetEvent;
-        (function (WidgetEvent) {
-            WidgetEvent["CLOSE"] = "CLOSE";
-        })(WidgetEvent || (WidgetEvent = {}));
-        function decodeWidgetMessage(e) {
-            try {
-                var json = JSON.parse(e.data);
-                invariant(json.ylide);
-                invariant(Object.values(WidgetId).includes(json.widget));
-                invariant(Object.values(WidgetEvent).includes(json.event));
-                return json;
-            }
-            catch (e) {
-                return;
-            }
-        }
-        //
         function invariant(condition, info) {
             if (condition)
                 return;
@@ -125,6 +103,29 @@ if (!window.Ylide) {
             return search;
         }
         //
+        var WidgetId;
+        (function (WidgetId) {
+            WidgetId["SEND_MESSAGE"] = "SEND_MESSAGE";
+            WidgetId["MAILBOX"] = "MAILBOX";
+        })(WidgetId || (WidgetId = {}));
+        var WidgetEvent;
+        (function (WidgetEvent) {
+            WidgetEvent["CLOSE"] = "CLOSE";
+        })(WidgetEvent || (WidgetEvent = {}));
+        function decodeWidgetMessage(e) {
+            try {
+                var json = JSON.parse(e.data);
+                invariant(json.ylide);
+                invariant(Object.values(WidgetId).includes(json.widget));
+                invariant(Object.values(WidgetEvent).includes(json.event));
+                return json;
+            }
+            catch (e) {
+                return;
+            }
+        }
+        //
+        var ylideHubUrl = 'https://hub.ylide.io';
         function requestToIndexerHub(url, body) {
             return __awaiter(this, void 0, void 0, function () {
                 var endpoints, endpoint, response, responseBody;
@@ -205,7 +206,6 @@ if (!window.Ylide) {
             };
         })();
         var SendMessagePopup = (function () {
-            var SEND_MESSAGE_POPUP_URL = "".concat("https://hub.ylide.io", "/widget/send-message");
             var container;
             var iframe;
             function messageListener(e) {
@@ -229,7 +229,7 @@ if (!window.Ylide) {
                         appendTo: container,
                         className: 'ylide-iframe',
                     });
-                    iframe.src = "".concat(SEND_MESSAGE_POPUP_URL, "?").concat(createURLSearchParams({
+                    iframe.src = "".concat(ylideHubUrl, "/widget/send-message?").concat(createURLSearchParams({
                         to: options.address,
                         subject: options.subject,
                     }).toString());
@@ -245,7 +245,6 @@ if (!window.Ylide) {
             };
         })();
         var MailboxPopup = (function () {
-            var MAILBOX_POPUP_URL = "".concat("https://hub.ylide.io", "/widget/mailbox");
             var CLASS_NAME = 'ylide-mailbox-popup';
             var container;
             var iframe;
@@ -269,7 +268,7 @@ if (!window.Ylide) {
                         appendTo: container,
                         className: 'ylide-iframe',
                     });
-                    iframe.src = MAILBOX_POPUP_URL;
+                    iframe.src = "".concat(ylideHubUrl, "/widget/mailbox");
                     window.addEventListener('message', messageListener);
                 },
                 close: function () {
@@ -285,7 +284,10 @@ if (!window.Ylide) {
         return {
             init: (function () {
                 var isInitialized = false;
-                return function () {
+                return function (options) {
+                    if (options === null || options === void 0 ? void 0 : options.ylideHubUrl) {
+                        ylideHubUrl = options.ylideHubUrl.replace(/\/+$/, '');
+                    }
                     if (!isInitialized) {
                         var styleSheet = document.createElement('style');
                         styleSheet.innerHTML = STYLES_1;
