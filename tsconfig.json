@@ -1,13 +1,12 @@
 {
 	"compilerOptions": {
-		"outFile": "./dist/ylide-widget.js",
-		"module": "AMD",
-		"target": "ES5",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
-		"newLine": "lf"
+		"newLine": "lf",
+		"declaration": true,
+		"declarationDir": "./dist"
 	},
 	"include": ["src"]
 }

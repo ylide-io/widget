@@ -1,7 +1,9 @@
 {
 	"name": "@ylide/widget",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"private": true,
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"scripts": {
 		"build": "webpack"
 	},

@@ -20,7 +20,12 @@ const output = isMinimized => {
 			extensions: ['.tsx', '.ts', '.js'],
 		},
 		output: {
-			filename: `ylide-widget${isMinimized ? '.min' : ''}.js`,
+			library: {
+				name: 'Ylide',
+				type: 'umd',
+				export: 'default',
+			},
+			filename: `index${isMinimized ? '.min' : ''}.js`,
 			path: path.resolve(__dirname, 'dist'),
 		},
 	}
