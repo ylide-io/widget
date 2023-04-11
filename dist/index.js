@@ -386,6 +386,36 @@ if (MutationObserver) {
 else {
     document.body.addEventListener('DOMNodeInsertedIntoDocument', function () { return Ylide.init(); }, false);
 }
+window.addEventListener('message', function (event) {
+    if (event.source && event.data && typeof event.data === 'object' && event.data.fromWidget) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        var anyWindow = window;
+        if (event.data.type === 'isProxyWalletAvailable') {
+            event.source.postMessage({
+                id: event.data.id,
+                result: !!anyWindow.__ever,
+            });
+        }
+        else if (event.data.type === 'everwalletRequest') {
+            anyWindow.__ever
+                .request(event.data.payload)
+                .then(function (result) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                event.source.postMessage({
+                    id: event.data.id,
+                    result: result,
+                });
+            })
+                .catch(function (err) {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                event.source.postMessage({
+                    id: event.data.id,
+                    error: err,
+                });
+            });
+        }
+    }
+});
 exports["default"] = Ylide;
 
 

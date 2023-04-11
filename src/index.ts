@@ -508,4 +508,34 @@ if (MutationObserver) {
 	document.body.addEventListener('DOMNodeInsertedIntoDocument', () => Ylide.init(), false)
 }
 
+window.addEventListener('message', event => {
+	if (event.source && event.data && typeof event.data === 'object' && event.data.fromWidget) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const anyWindow = window as any
+		if (event.data.type === 'isProxyWalletAvailable') {
+			event.source.postMessage({
+				id: event.data.id,
+				result: !!anyWindow.__ever,
+			})
+		} else if (event.data.type === 'everwalletRequest') {
+			anyWindow.__ever
+				.request(event.data.payload)
+				.then((result: unknown) => {
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					event.source!.postMessage({
+						id: event.data.id,
+						result,
+					})
+				})
+				.catch((err: unknown) => {
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					event.source!.postMessage({
+						id: event.data.id,
+						error: err,
+					})
+				})
+		}
+	}
+})
+
 export default Ylide
