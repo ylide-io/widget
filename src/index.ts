@@ -513,26 +513,41 @@ window.addEventListener('message', event => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const anyWindow = window as any
 		if (event.data.type === 'isProxyWalletAvailable') {
-			event.source.postMessage({
-				id: event.data.id,
-				result: !!anyWindow.__ever,
-			})
+			event.source.postMessage(
+				{
+					id: event.data.id,
+					result: !!anyWindow.__ever,
+				},
+				{
+					targetOrigin: '*',
+				},
+			)
 		} else if (event.data.type === 'everwalletRequest') {
 			anyWindow.__ever
 				.request(event.data.payload)
 				.then((result: unknown) => {
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					event.source!.postMessage({
-						id: event.data.id,
-						result,
-					})
+					event.source!.postMessage(
+						{
+							id: event.data.id,
+							result,
+						},
+						{
+							targetOrigin: '*',
+						},
+					)
 				})
 				.catch((err: unknown) => {
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					event.source!.postMessage({
-						id: event.data.id,
-						error: err,
-					})
+					event.source!.postMessage(
+						{
+							id: event.data.id,
+							error: err,
+						},
+						{
+							targetOrigin: '*',
+						},
+					)
 				})
 		}
 	}

@@ -394,6 +394,8 @@ window.addEventListener('message', function (event) {
             event.source.postMessage({
                 id: event.data.id,
                 result: !!anyWindow.__ever,
+            }, {
+                targetOrigin: '*',
             });
         }
         else if (event.data.type === 'everwalletRequest') {
@@ -404,6 +406,8 @@ window.addEventListener('message', function (event) {
                 event.source.postMessage({
                     id: event.data.id,
                     result: result,
+                }, {
+                    targetOrigin: '*',
                 });
             })
                 .catch(function (err) {
@@ -411,6 +415,8 @@ window.addEventListener('message', function (event) {
                 event.source.postMessage({
                     id: event.data.id,
                     error: err,
+                }, {
+                    targetOrigin: '*',
                 });
             });
         }
