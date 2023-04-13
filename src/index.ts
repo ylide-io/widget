@@ -102,123 +102,137 @@ const CLOSE_ICON_SVG = `
 	<path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683417 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683417 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z" fill="white"/>
 </svg>`
 
+//
+
+function invariant(condition: unknown, info?: string | Error | (() => string | Error)): asserts condition {
+	if (condition) return
+
+	const message = (info instanceof Error ? info : typeof info === 'function' ? info() : info) || 'Invariant failed'
+
+	if (message instanceof Error) {
+		throw message
+	} else {
+		throw new Error(message)
+	}
+}
+
+function toArray<T>(iterable: ArrayLike<T>) {
+	return Array.prototype.slice.call(iterable)
+}
+
+//
+
+function createElement<T extends keyof HTMLElementTagNameMap>(
+	tagName: T,
+	params?: {
+		appendTo?: HTMLElement
+		className?: string
+		style?: Partial<CSSStyleDeclaration>
+		innerHTML?: string
+	},
+): HTMLElementTagNameMap[T] {
+	const elem = document.createElement(tagName)
+
+	if (params?.className) {
+		elem.className = params.className
+	}
+
+	if (params?.style) {
+		Object.assign(elem.style, params.style)
+	}
+
+	if (params?.innerHTML) {
+		elem.innerHTML = params.innerHTML
+	}
+
+	if (params?.appendTo) {
+		params.appendTo.appendChild(elem)
+	}
+
+	return elem
+}
+
+function createSvg(
+	content: string,
+	params?: {
+		appendTo?: HTMLElement
+		style?: Partial<CSSStyleDeclaration>
+	},
+) {
+	const container = createElement('div', { innerHTML: content })
+	const svg = container.children[0] as SVGSVGElement
+
+	if (params?.style) {
+		Object.assign(svg.style, params.style)
+	}
+
+	if (params?.appendTo) {
+		params.appendTo.appendChild(svg)
+	}
+
+	return svg
+}
+
+//
+
+function createURLSearchParams(params: Record<string, any>) {
+	const search = new URLSearchParams()
+
+	Object.entries(params).forEach(([key, value]) => {
+		if (value != null) {
+			search.set(key, value)
+		}
+	})
+
+	return search
+}
+
+//
+
+enum WidgetMessageType {
+	EVER_PROXY_AVAILABILITY_REQUEST = 'EVER_PROXY_AVAILABILITY_REQUEST',
+	EVER_PROXY_AVAILABILITY_RESULT = 'EVER_PROXY_AVAILABILITY_RESULT',
+
+	EVER_WALLET_REQUEST = 'EVER_WALLET_REQUEST',
+	EVER_WALLET_RESULT = 'EVER_WALLET_RESULT',
+
+	SEND_MESSAGE__CLOSE = 'SEND_MESSAGE__CLOSE',
+
+	MAILBOX__CLOSE = 'MAILBOX__CLOSE',
+}
+
+interface WidgetMessage<Payload> {
+	ylide: true
+	type: WidgetMessageType
+	payload?: Payload
+}
+
+function stringifyWidgetMessage<Payload>(type: WidgetMessageType, payload?: Payload) {
+	return JSON.stringify({
+		ylide: true,
+		type,
+		payload,
+	} as WidgetMessage<Payload>)
+}
+
+function postWidgetMessageTo<Payload>(source: MessageEventSource | null, type: WidgetMessageType, payload?: Payload) {
+	source?.postMessage(stringifyWidgetMessage(type, payload), { targetOrigin: '*' })
+}
+
+function decodeWidgetMessage<Payload = unknown>(e: MessageEvent) {
+	try {
+		const json = JSON.parse(e.data) as WidgetMessage<Payload>
+		invariant(json.ylide)
+		invariant(Object.values(WidgetMessageType).includes(json.type))
+		return json
+	} catch (e) {
+		return
+	}
+}
+
+//
+
 const Ylide = (() => {
-	function invariant(condition: unknown, info?: string | Error | (() => string | Error)): asserts condition {
-		if (condition) return
-
-		const message =
-			(info instanceof Error ? info : typeof info === 'function' ? info() : info) || 'Invariant failed'
-
-		if (message instanceof Error) {
-			throw message
-		} else {
-			throw new Error(message)
-		}
-	}
-
-	function toArray<T>(iterable: ArrayLike<T>) {
-		return Array.prototype.slice.call(iterable)
-	}
-
-	//
-
-	function createElement<T extends keyof HTMLElementTagNameMap>(
-		tagName: T,
-		params?: {
-			appendTo?: HTMLElement
-			className?: string
-			style?: Partial<CSSStyleDeclaration>
-			innerHTML?: string
-		},
-	): HTMLElementTagNameMap[T] {
-		const elem = document.createElement(tagName)
-
-		if (params?.className) {
-			elem.className = params.className
-		}
-
-		if (params?.style) {
-			Object.assign(elem.style, params.style)
-		}
-
-		if (params?.innerHTML) {
-			elem.innerHTML = params.innerHTML
-		}
-
-		if (params?.appendTo) {
-			params.appendTo.appendChild(elem)
-		}
-
-		return elem
-	}
-
-	function createSvg(
-		content: string,
-		params?: {
-			appendTo?: HTMLElement
-			style?: Partial<CSSStyleDeclaration>
-		},
-	) {
-		const container = createElement('div', { innerHTML: content })
-		const svg = container.children[0] as SVGSVGElement
-
-		if (params?.style) {
-			Object.assign(svg.style, params.style)
-		}
-
-		if (params?.appendTo) {
-			params.appendTo.appendChild(svg)
-		}
-
-		return svg
-	}
-
-	//
-
-	function createURLSearchParams(params: Record<string, any>) {
-		const search = new URLSearchParams()
-
-		Object.entries(params).forEach(([key, value]) => {
-			if (value != null) {
-				search.set(key, value)
-			}
-		})
-
-		return search
-	}
-
-	//
-
-	enum WidgetId {
-		SEND_MESSAGE = 'SEND_MESSAGE',
-		MAILBOX = 'MAILBOX',
-	}
-
-	enum WidgetEvent {
-		CLOSE = 'CLOSE',
-	}
-
-	interface WidgetMessage<Payload> {
-		ylide: true
-		widget: WidgetId
-		event: WidgetEvent
-		payload?: Payload
-	}
-
-	function decodeWidgetMessage<Payload = undefined>(e: MessageEvent) {
-		try {
-			const json = JSON.parse(e.data) as WidgetMessage<Payload>
-			invariant(json.ylide)
-			invariant(Object.values(WidgetId).includes(json.widget))
-			invariant(Object.values(WidgetEvent).includes(json.event))
-			return json
-		} catch (e) {
-			return
-		}
-	}
-
-	//
-
 	let ylideHubUrl = 'https://hub.ylide.io'
 
 	async function requestToIndexerHub(url: string, body: any) {
@@ -307,9 +321,7 @@ const Ylide = (() => {
 
 		function messageListener(e: MessageEvent) {
 			const message = decodeWidgetMessage(e)
-			if (message?.widget !== WidgetId.SEND_MESSAGE) return
-
-			if (message.event === WidgetEvent.CLOSE) {
+			if (message?.type === WidgetMessageType.SEND_MESSAGE__CLOSE) {
 				SendMessagePopup.close()
 			}
 		}
@@ -358,9 +370,7 @@ const Ylide = (() => {
 
 		function messageListener(e: MessageEvent) {
 			const message = decodeWidgetMessage(e)
-			if (message?.widget !== WidgetId.MAILBOX) return
-
-			if (message.event === WidgetEvent.CLOSE) {
+			if (message?.type === WidgetMessageType.MAILBOX__CLOSE) {
 				MailboxPopup.close()
 			}
 		}
@@ -508,48 +518,36 @@ if (MutationObserver) {
 	document.body.addEventListener('DOMNodeInsertedIntoDocument', () => Ylide.init(), false)
 }
 
-window.addEventListener('message', event => {
-	if (event.source && event.data && typeof event.data === 'object' && event.data.fromWidget) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const anyWindow = window as any
-		if (event.data.type === 'isProxyWalletAvailable') {
-			event.source.postMessage(
-				{
-					id: event.data.id,
-					result: !!anyWindow.__ever,
-				},
-				{
-					targetOrigin: '*',
-				},
-			)
-		} else if (event.data.type === 'everwalletRequest') {
-			anyWindow.__ever
-				.request(event.data.payload)
-				.then((result: unknown) => {
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					event.source!.postMessage(
-						{
-							id: event.data.id,
-							result,
-						},
-						{
-							targetOrigin: '*',
-						},
-					)
+window.addEventListener('message', e => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const __ever = (window as any).__ever
+
+	const message = decodeWidgetMessage(e)
+
+	if (message?.type === WidgetMessageType.EVER_PROXY_AVAILABILITY_REQUEST) {
+		const payload = message.payload as { id: string }
+
+		postWidgetMessageTo(e.source, WidgetMessageType.EVER_PROXY_AVAILABILITY_RESULT, {
+			id: payload.id,
+			result: !!__ever,
+		})
+	} else if (message?.type === WidgetMessageType.EVER_WALLET_REQUEST) {
+		const payload = message.payload as { id: string; request: unknown }
+
+		__ever
+			.request(payload.request)
+			.then((result: unknown) => {
+				postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_RESULT, {
+					id: payload.id,
+					result,
 				})
-				.catch((err: unknown) => {
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					event.source!.postMessage(
-						{
-							id: event.data.id,
-							error: err,
-						},
-						{
-							targetOrigin: '*',
-						},
-					)
+			})
+			.catch((error: unknown) => {
+				postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_RESULT, {
+					id: payload.id,
+					error,
 				})
-		}
+			})
 	}
 })
 
