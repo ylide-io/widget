@@ -113,10 +113,8 @@ function createURLSearchParams(params) {
 //
 var WidgetMessageType;
 (function (WidgetMessageType) {
-    WidgetMessageType["EVER_PROXY_AVAILABILITY_REQUEST"] = "EVER_PROXY_AVAILABILITY_REQUEST";
-    WidgetMessageType["EVER_PROXY_AVAILABILITY_RESULT"] = "EVER_PROXY_AVAILABILITY_RESULT";
+    WidgetMessageType["EVER_PROXY_AVAILABILITY"] = "EVER_PROXY_AVAILABILITY";
     WidgetMessageType["EVER_WALLET_REQUEST"] = "EVER_WALLET_REQUEST";
-    WidgetMessageType["EVER_WALLET_RESULT"] = "EVER_WALLET_RESULT";
     WidgetMessageType["SEND_MESSAGE__CLOSE"] = "SEND_MESSAGE__CLOSE";
     WidgetMessageType["MAILBOX__CLOSE"] = "MAILBOX__CLOSE";
 })(WidgetMessageType || (WidgetMessageType = {}));
@@ -396,9 +394,9 @@ window.addEventListener('message', function (e) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     var __ever = window.__ever;
     var message = decodeWidgetMessage(e);
-    if ((message === null || message === void 0 ? void 0 : message.type) === WidgetMessageType.EVER_PROXY_AVAILABILITY_REQUEST) {
+    if ((message === null || message === void 0 ? void 0 : message.type) === WidgetMessageType.EVER_PROXY_AVAILABILITY) {
         var payload = message.payload;
-        postWidgetMessageTo(e.source, WidgetMessageType.EVER_PROXY_AVAILABILITY_RESULT, {
+        postWidgetMessageTo(e.source, WidgetMessageType.EVER_PROXY_AVAILABILITY, {
             id: payload.id,
             result: !!__ever
         });
@@ -408,12 +406,12 @@ window.addEventListener('message', function (e) {
         __ever
             .request(payload_1.request)
             .then(function (result) {
-            postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_RESULT, {
+            postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_REQUEST, {
                 id: payload_1.id,
                 result: result
             });
         })["catch"](function (error) {
-            postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_RESULT, {
+            postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_REQUEST, {
                 id: payload_1.id,
                 error: error
             });

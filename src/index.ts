@@ -190,11 +190,8 @@ function createURLSearchParams(params: Record<string, any>) {
 //
 
 enum WidgetMessageType {
-	EVER_PROXY_AVAILABILITY_REQUEST = 'EVER_PROXY_AVAILABILITY_REQUEST',
-	EVER_PROXY_AVAILABILITY_RESULT = 'EVER_PROXY_AVAILABILITY_RESULT',
-
+	EVER_PROXY_AVAILABILITY = 'EVER_PROXY_AVAILABILITY',
 	EVER_WALLET_REQUEST = 'EVER_WALLET_REQUEST',
-	EVER_WALLET_RESULT = 'EVER_WALLET_RESULT',
 
 	SEND_MESSAGE__CLOSE = 'SEND_MESSAGE__CLOSE',
 
@@ -524,10 +521,10 @@ window.addEventListener('message', e => {
 
 	const message = decodeWidgetMessage(e)
 
-	if (message?.type === WidgetMessageType.EVER_PROXY_AVAILABILITY_REQUEST) {
+	if (message?.type === WidgetMessageType.EVER_PROXY_AVAILABILITY) {
 		const payload = message.payload as { id: string }
 
-		postWidgetMessageTo(e.source, WidgetMessageType.EVER_PROXY_AVAILABILITY_RESULT, {
+		postWidgetMessageTo(e.source, WidgetMessageType.EVER_PROXY_AVAILABILITY, {
 			id: payload.id,
 			result: !!__ever,
 		})
@@ -537,13 +534,13 @@ window.addEventListener('message', e => {
 		__ever
 			.request(payload.request)
 			.then((result: unknown) => {
-				postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_RESULT, {
+				postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_REQUEST, {
 					id: payload.id,
 					result,
 				})
 			})
 			.catch((error: unknown) => {
-				postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_RESULT, {
+				postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_REQUEST, {
 					id: payload.id,
 					error,
 				})
