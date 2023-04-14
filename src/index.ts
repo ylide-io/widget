@@ -532,7 +532,7 @@ window.addEventListener('message', e => {
 			result: !!__ever,
 		})
 	} else if (message?.type === WidgetMessageType.EVER_WALLET_REQUEST) {
-		const payload = message.payload as { id: string; request: unknown }
+		const payload = message.payload as { id: string; request: { method: string; params: unknown } }
 
 		__ever
 			.request(payload.request)
