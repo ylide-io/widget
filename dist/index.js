@@ -12,7 +12,7 @@ return /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 628:
+/***/ 682:
 /***/ (function(__unused_webpack_module, exports) {
 
 
@@ -52,7 +52,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 var STYLES = "\niframe.ylide-iframe {\n\twidth: 100%;\n\theight: 100%;\n\tborder: 0;\n}\n\n.ylide-send-message-popup {\n\tposition: fixed;\n    right: 36px;\n    bottom: 0;\n    width: 500px;\n    height: 520px;\n    max-width: 100%;\n    max-height: 100%;\n    overflow: hidden;\n    background: #f7f7ee;\n    border-radius: 8px 8px 0 0;\n    box-shadow: rgba(26, 179, 148, 0.4) 4px 4px 24px, rgba(151, 71, 255, 0.25) -16px -8px 64px;\n    transition: all 200ms;\n}\n\n.ylide-floating-button {\n\tdisplay: flex;\n\talign-items: center;\n    justify-content: center;\n    position: fixed;\n    right: 36px;\n    bottom: 36px;\n    width: 48px;\n    height: 48px;\n    color: #111;\n    background: #ebe2f9;\n    border-radius: 100%;\n    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 20px;\n    cursor: pointer;\n}\n\n.ylide-floating-button_active {\n    color: #fff;\n    background: #9747ff;\n}\n\n.ylide-floating-button svg {\n\tfill: currentColor;\n}\n\n.ylide-mailbox-popup {\n\tposition: fixed;\n    right: 36px;\n    bottom: 0;\n    width: 500px;\n    height: 520px;\n    max-width: 100%;\n    overflow: hidden;\n    background: #f7f7ee;\n    border-radius: 8px 8px 0 0;\n    box-shadow: rgba(26, 179, 148, 0.4) 4px 4px 24px, rgba(151, 71, 255, 0.25) -16px -8px 64px;\n    transition: all 200ms;\n}\n\n@media (max-width: 640px), (max-height: 640px) {\n\t.ylide-send-message-popup {\n\t\tright: 0;\n\t\twidth: 100%;\n\t\theight: 100%;\n\t\tborder-radius: 0;\n\t}\n  \n  \t.ylide-mailbox-popup {\n\t\ttop: 0;\n\t\tright: 0;\n\t\twidth: 100%;\n    \theight: auto;\n\t\tborder-radius: 0;\n  \t}\n}\n\t";
 var YLIDE_LOGO_SVG = "\n<svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" xmlns=\"http://www.w3.org/2000/svg\">\n\t<path d=\"M0 7.92434C0 6.65706 1.02734 5.62972 2.29463 5.62972H2.45212C3.7194 5.62972 4.74674 6.65706 4.74674 7.92434C4.74674 9.19163 3.7194 10.219 2.45212 10.219H2.29462C1.02734 10.219 0 9.19163 0 7.92434Z\"></path>\n\t<path d=\"M5.8037 2.29462C5.8037 1.02734 6.83104 0 8.09833 0H8.25582C9.52311 0 10.5504 1.02734 10.5504 2.29462C10.5504 3.56191 9.52311 4.58925 8.25582 4.58925H8.09833C6.83104 4.58925 5.8037 3.56191 5.8037 2.29462Z\"></path>\n\t<path d=\"M17.4496 2.29462C17.4496 1.02734 18.4769 0 19.7442 0H19.9017C21.169 0 22.1963 1.02734 22.1963 2.29462C22.1963 3.56191 21.169 4.58925 19.9017 4.58925H19.7442C18.4769 4.58925 17.4496 3.56191 17.4496 2.29462Z\"></path>\n\t<path d=\"M23.2533 7.92434C23.2533 6.65706 24.2806 5.62972 25.5479 5.62972H25.7054C26.9727 5.62972 28 6.65706 28 7.92434C28 9.19163 26.9727 10.219 25.7054 10.219H25.5479C24.2806 10.219 23.2533 9.19163 23.2533 7.92434Z\"></path>\n\t<path d=\"M17.4496 13.5912C17.4496 12.3239 18.4769 11.2966 19.7442 11.2966H19.9017C21.169 11.2966 22.1963 12.3239 22.1963 13.5912C22.1963 14.8585 21.169 15.8859 19.9017 15.8859H19.7442C18.4769 15.8859 17.4496 14.8585 17.4496 13.5912Z\"></path>\n\t<path d=\"M11.6266 7.92434C11.6266 6.65706 12.654 5.62972 13.9213 5.62972H14.0787C15.346 5.62972 16.3734 6.65706 16.3734 7.92434C16.3734 9.19163 15.346 10.219 14.0787 10.219H13.9213C12.654 10.219 11.6266 9.19163 11.6266 7.92434Z\"></path>\n\t<path d=\"M11.6266 19.1281C11.6266 17.8608 12.654 16.8334 13.9213 16.8334H14.0787C15.346 16.8334 16.3734 17.8608 16.3734 19.1281C16.3734 20.3954 15.346 21.4227 14.0787 21.4227H13.9213C12.654 21.4227 11.6266 20.3954 11.6266 19.1281Z\"></path>\n\t<path d=\"M5.8037 13.5912C5.8037 12.3239 6.83104 11.2966 8.09833 11.2966H8.25582C9.52311 11.2966 10.5504 12.3239 10.5504 13.5912C10.5504 14.8585 9.52311 15.8859 8.25582 15.8859H8.09833C6.83104 15.8859 5.8037 14.8585 5.8037 13.5912Z\"></path>\n\t<path d=\"M12.8488 5.91723L10.2707 3.42295V3.37635C10.0478 3.77876 9.70441 4.10944 9.28715 4.32331H9.33959L11.9169 6.8168V6.82378C12.1325 6.4431 12.4566 6.12798 12.8488 5.91723Z\"></path>\n\t<path d=\"M17.7472 3.42295V3.40806C17.9703 3.79613 18.3066 4.11508 18.7128 4.32331H18.6783L16.101 6.8168V6.85599C15.887 6.46348 15.5588 6.13821 15.1591 5.92153H15.1646L17.7472 3.42295Z\"></path>\n\t<path d=\"M13.3511 10.1322V16.9203C13.5573 16.8637 13.775 16.8334 14 16.8334C14.232 16.8334 14.4562 16.8656 14.6681 16.9256V10.1268C14.4562 10.1868 14.232 10.219 14 10.219C13.775 10.219 13.5573 10.1887 13.3511 10.1322Z\"></path>\n\t<path d=\"M12.7941 17.1513L10.2628 14.7035V14.6871C10.0427 15.0779 9.70845 15.4 9.30341 15.6115H9.33959L11.8891 18.0781C12.0945 17.6928 12.4095 17.3711 12.7941 17.1513Z\"></path>\n\t<path d=\"M6.08007 12.4596V12.5156C6.30137 12.1132 6.64299 11.782 7.05855 11.5669H7.01775L4.43265 9.06589C4.20471 9.44942 3.86545 9.76324 3.45749 9.96613H3.50142L6.08007 12.4596Z\"></path>\n\t<path d=\"M13.3511 21.3359V28H14.6681V21.3305C14.4562 21.3905 14.232 21.4227 14 21.4227C13.775 21.4227 13.5573 21.3924 13.3511 21.3359Z\"></path>\n\t<path d=\"M16.1165 18.0887L18.6835 15.6064H18.6869C18.2937 15.3988 17.968 15.0867 17.7496 14.7088L15.2171 17.1577C15.6001 17.3794 15.9132 17.7025 16.1165 18.0887Z\"></path>\n\t<path d=\"M21.9352 12.4622V12.5438C21.7128 12.1254 21.3613 11.7817 20.9315 11.5618H21.0041L23.5739 9.07686C23.8017 9.45541 24.1384 9.76518 24.5425 9.96613H24.5164L21.9352 12.4622Z\"></path>\n</svg>";
 var CLOSE_ICON_SVG = "\n<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L7 5.58579L12.2929 0.292893C12.6834 -0.0976311 13.3166 -0.0976311 13.7071 0.292893C14.0976 0.683417 14.0976 1.31658 13.7071 1.70711L8.41421 7L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L7 8.41421L1.70711 13.7071C1.31658 14.0976 0.683417 14.0976 0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929L5.58579 7L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z\" fill=\"white\"/>\n</svg>";
@@ -122,7 +122,7 @@ function stringifyWidgetMessage(type, payload) {
     return JSON.stringify({
         ylide: true,
         type: type,
-        payload: payload
+        payload: payload,
     });
 }
 function postWidgetMessageTo(source, type, payload) {
@@ -160,8 +160,8 @@ var Ylide = (function () {
                                 method: 'POST',
                                 body: JSON.stringify(body),
                                 headers: {
-                                    'Content-Type': 'text/plain'
-                                }
+                                    'Content-Type': 'text/plain',
+                                },
                             })];
                     case 1:
                         response = _a.sent();
@@ -184,8 +184,8 @@ var Ylide = (function () {
         appendTo: document.body,
         style: {
             position: 'relative',
-            zIndex: '1'
-        }
+            zIndex: '1',
+        },
     });
     var FloatingButton = (function () {
         var CLASS_NAME = 'ylide-floating-button';
@@ -195,7 +195,7 @@ var Ylide = (function () {
                 FloatingButton.hide();
                 button = createElement('div', {
                     appendTo: root,
-                    className: CLASS_NAME
+                    className: CLASS_NAME,
                 });
                 FloatingButton.setIsActive(false);
                 FloatingButton.setOnClick(onClick);
@@ -211,14 +211,14 @@ var Ylide = (function () {
                 button.className = "".concat(CLASS_NAME, " ").concat(isActive ? "".concat(CLASS_NAME, "_active") : '');
                 button.innerHTML = '';
                 createSvg(isActive ? CLOSE_ICON_SVG : YLIDE_LOGO_SVG, {
-                    appendTo: button
+                    appendTo: button,
                 });
             },
             setOnClick: function (onClick) {
                 if (!button)
                     return;
                 button.onclick = onClick || null;
-            }
+            },
         };
     })();
     var SendMessagePopup = (function () {
@@ -237,15 +237,15 @@ var Ylide = (function () {
                 // TODO: Responsiveness
                 container = createElement('div', {
                     appendTo: root,
-                    className: 'ylide-send-message-popup'
+                    className: 'ylide-send-message-popup',
                 });
                 iframe = createElement('iframe', {
                     appendTo: container,
-                    className: 'ylide-iframe'
+                    className: 'ylide-iframe',
                 });
                 iframe.src = "".concat(ylideHubUrl, "/widget/send-message?").concat(createURLSearchParams({
                     to: options.address,
-                    subject: options.subject
+                    subject: options.subject,
                 }).toString());
                 window.addEventListener('message', messageListener);
             },
@@ -255,7 +255,7 @@ var Ylide = (function () {
                 }
                 container = iframe = undefined;
                 window.removeEventListener('message', messageListener);
-            }
+            },
         };
     })();
     var MailboxPopup = (function () {
@@ -274,11 +274,11 @@ var Ylide = (function () {
                 SendMessagePopup.close();
                 container = createElement('div', {
                     appendTo: root,
-                    className: CLASS_NAME
+                    className: CLASS_NAME,
                 });
                 iframe = createElement('iframe', {
                     appendTo: container,
-                    className: 'ylide-iframe'
+                    className: 'ylide-iframe',
                 });
                 iframe.src = "".concat(ylideHubUrl, "/widget/mailbox");
                 window.addEventListener('message', messageListener);
@@ -289,7 +289,7 @@ var Ylide = (function () {
                 }
                 container = iframe = undefined;
                 window.removeEventListener('message', messageListener);
-            }
+            },
         };
     })();
     //
@@ -326,7 +326,7 @@ var Ylide = (function () {
                             color: '#222',
                             background: '#ebe2f9',
                             borderRadius: '4px',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
                         });
                         createSvg('<svg width="14" height="14" viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg">' +
                             '<path d="M0 10.4643C0 8.79078 1.35662 7.43416 3.0301 7.43416H3.23807C4.91155 7.43416 6.26817 8.79078 6.26817 10.4643C6.26817 12.1377 4.91154 13.4944 3.23807 13.4944H3.0301C1.35662 13.4944 0 12.1377 0 10.4643Z"/>' +
@@ -349,12 +349,12 @@ var Ylide = (function () {
                             appendTo: button,
                             style: {
                                 margin: '0 8px 0 0',
-                                fill: 'currentColor'
-                            }
+                                fill: 'currentColor',
+                            },
                         });
                         createElement('div', {
                             appendTo: button,
-                            innerHTML: 'Send Message'
+                            innerHTML: 'Send Message',
                         });
                         button.onclick = function () { return Ylide.openSendMessagePopup({ address: address, subject: subject }); };
                     });
@@ -377,11 +377,11 @@ var Ylide = (function () {
         openMailboxPopup: MailboxPopup.open,
         showFloatingMailboxButton: function () {
             FloatingButton.show(function () { return MailboxPopup.open(); });
-        }
+        },
     };
 })();
 Ylide.init({
-    ylideHubUrl: new URLSearchParams(location.search).get('ylideHubUrl') || undefined
+    ylideHubUrl: new URLSearchParams(location.search).get('ylideHubUrl') || undefined,
 });
 // @ts-ignore
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
@@ -400,7 +400,7 @@ window.addEventListener('message', function (e) {
         var payload = message.payload;
         postWidgetMessageTo(e.source, WidgetMessageType.EVER_PROXY_AVAILABILITY, {
             id: payload.id,
-            result: !!__ever
+            result: !!__ever,
         });
     }
     else if ((message === null || message === void 0 ? void 0 : message.type) === WidgetMessageType.EVER_WALLET_REQUEST) {
@@ -410,12 +410,13 @@ window.addEventListener('message', function (e) {
             .then(function (result) {
             postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_REQUEST, {
                 id: payload_1.id,
-                result: result
+                result: result,
             });
-        })["catch"](function (error) {
+        })
+            .catch(function (error) {
             postWidgetMessageTo(e.source, WidgetMessageType.EVER_WALLET_REQUEST, {
                 id: payload_1.id,
-                error: error
+                error: error,
             });
         });
     }
@@ -432,7 +433,7 @@ exports["default"] = Ylide;
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
 /******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__[628](0, __webpack_exports__);
+/******/ 	__webpack_modules__[682](0, __webpack_exports__);
 /******/ 	__webpack_exports__ = __webpack_exports__["default"];
 /******/ 	
 /******/ 	return __webpack_exports__;
