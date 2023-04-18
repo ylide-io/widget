@@ -503,7 +503,9 @@ const Ylide = (() => {
 	}
 })()
 
-Ylide.init()
+Ylide.init({
+	ylideHubUrl: new URLSearchParams(location.search).get('ylideHubUrl') || undefined,
+})
 
 // @ts-ignore
 const MutationObserver = window.MutationObserver || window.WebKitMutationObserver
